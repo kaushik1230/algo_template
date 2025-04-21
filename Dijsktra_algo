@@ -1,0 +1,54 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+int n , m;
+cin>>n>>m;
+vector<vector<pair<int,int>>> adj(n+1,vector<pair<int,int>>());
+for(int i =0;i<m;i++)
+{
+int u , v , d;
+cin>>u>>v>>d;
+adj[u].push_back({v,d});
+adj[v].push_back({u,d});
+}
+
+vector<pair<long long,int>> dist(n+1,{LLONG_MAX,-1});
+dist[1]={0,-1};
+priority_queue<pair<long long,int>,vector<pair<long long,int>>,greater<>> q;
+q.push({0,1});
+        while(!q.empty())
+        {
+                long long d = q.top().first;
+                int c = q.top().second;
+                q.pop();
+                if(d>dist[c].first) continue;
+                for(auto x:adj[c])
+                {
+
+
+
+                        if(d+x.second<dist[x.first].first)
+                        {
+                                dist[x.first] = {d+x.second,c};
+                                q.push({dist[x.first].first,x.first});
+                        }
+                }
+        }
+vector<int> ans;
+if(dist[n].first==LLONG_MAX) cout<<-1;
+else{
+int curr = n;
+while(curr!=-1)
+{
+ans.push_back(curr);
+curr=dist[curr].second;
+}
+reverse(ans.begin(),ans.end());
+for(auto x:ans)
+cout<<x<<" ";
+}
+return 0;
+
+}
+
